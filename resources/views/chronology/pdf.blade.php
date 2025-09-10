@@ -37,7 +37,22 @@
         {!! nl2br(e($chronology->kronologis)) !!}
     </div>
 
-    <img src="{{ public_path('images/tandatangan.png') }}" alt="Preview" style="border:1px solid black; max-width:100%; height:auto;">
+    @if(!empty($isPdf))
+        <img src="{{ public_path('images/tandatangan.png') }}" 
+            style="border:1px solid black; width:100%; height:auto;" alt="Logo">
+    @else
+        <img src="{{ asset('images/tandatangan.png') }}" 
+            style="border:1px solid black; width:100%; height:auto;" alt="Logo">
+    @endif
+
+    @if (!empty($chronology->solutions))
+    <h3 class="section-title">Diisi Oleh Operation Manager</h3>
+    <ol class="content">
+        @foreach ($chronology->solutions ?? [] as $solusi)
+        <li>{{ $solusi }}</li>
+        @endforeach
+    </ol>
+    @endif
 
     @if(empty($isPdf))
         <div style="text-align: right; margin-top: 15px;">

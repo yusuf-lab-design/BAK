@@ -13,7 +13,13 @@ class Chronological extends Model
             'uuid',
             'area',
             'subject',
-            'kronologis'
+            'kronologis',
+            'solutions',
+        ];
+    
+        protected $casts = [
+            'subject' => 'array',
+            'solutions' => 'array',
         ];
 
     protected static function boot()

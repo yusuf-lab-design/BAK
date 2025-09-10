@@ -84,15 +84,15 @@ class ChronologicalController extends Controller
             }  
             $next++;
         } while (true);
-        
-
+    
         // simpan ke database
         $chronology = Chronological::create([
             'no' => $nextNumber,
             'area' => $area,
             'tanggal' => now(),
-            'subject' => implode(', ', $request->subject),
+            'subject' => $request->subject ? json_encode($request->subject) : null,
             'kronologis' => $request->kronologis,
+            'solutions' => $request->solutions ?? '[]',
         ]);
 
         // pastikan folder pdf ada

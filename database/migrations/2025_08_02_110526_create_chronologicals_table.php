@@ -16,8 +16,9 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('no')->unique()->nullable();
             $table->string('area')->index();
-            $table->string('subject')->nullable();
+            $table->json('subject')->nullable();
             $table->longText('kronologis')->nullable();
+            $table->json('solutions')->nullable();
             $table->timestamps();
         });
     }

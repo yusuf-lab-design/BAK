@@ -61,6 +61,42 @@
                                     class="w-full border rounded-md p-2 text-sm"></textarea>
                             </div>
 
+                            <div class="mb-4">
+                                <label for="solutions" class="block text-sm font-medium text-gray-700">Solusi</label>
+                                <select id="solution-select" class="w-full" multiple>
+                                    <option value="Proses Sesuai Surkom Pembebanan">Proses Sesuai Surkom Pembebanan</option>
+                                    <option value="100% Beban BM">100% Beban BM</option>
+                                    <option value="100% Beban Sales">100% Beban Sales</option>
+                                    <option value="Revisi SI">Revisi SI</option>
+                                    <option value="Revisi Receiving">Revisi Receiving</option>
+                                    <option value="Revisi PI">Revisi PI</option>
+                                    <option value="Revisi Hasil Opname">Revisi Hasil Opname</option>
+                                    <option value="Revisi Adj. In/Out">Revisi Adj. In/Out</option>
+                                    <option value="Lapor Pihak Berwajib">Lapor Pihak Berwajib</option>
+                                    <option value="Pemberian Surat Peringatan">Pemberian Surat Peringatan</option>
+                                    <option value="Pemberian Teguran Lisan">Pemberian Teguran Lisan</option>
+                                    <option value="Batalkan Transaksi">Batalkan Transaksi</option>
+                                    <option value="Revisi Menggunakan COA:">Revisi Menggunakan COA:</option>
+                                </select>
+
+                                <ul id="solution-list" class="mt-2 list-disc list-inside text-sm text-gray-700"></ul>
+                                <input type="hidden" name="solutions" id="solutions-input">
+                            </div>
+
+                            <script>
+                                $(document).ready(function () {
+                                    $('#solution-select').select2();
+
+                                    $('#solution-select').on('change', function() {
+                                        let values = $(this).val()|| [];
+                                        let list = $('#solution-list');
+                                        list.empty();
+                                        values.forEach(v => list.append(`<li>${v}</li>`));
+                                        $('#solutions-input').val(JSON.stringify(values));
+                                    });
+                                });
+                            </script>
+
                             <div class="mt-4">
                                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow">Submit</button>
                             </div>
