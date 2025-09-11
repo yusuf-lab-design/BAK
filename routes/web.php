@@ -23,8 +23,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Route::get('/chronology', [ProfileController::class, 'edit'])->name('chronology.edit');
-    // Route::patch('/chronology', [ProfileController::class, 'update'])->name('chronology.update');
+    Route::get('/chronology/edit', [ChronologicalController::class, 'edit'])->name('chronology.edit');
+    Route::patch('/chronology', [ChronologicalController::class, 'update'])->name('chronology.update');
     Route::get('/chronology', [ChronologicalController::class, 'index'])->name('chronology.index');
     Route::get('/chronology/create', [ChronologicalController::class, 'create'])->name('chronology.create');
     Route::post('/chronology/store', [ChronologicalController::class, 'store'])->name('chronology.store');

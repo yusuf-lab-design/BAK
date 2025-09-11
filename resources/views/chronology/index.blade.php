@@ -39,11 +39,19 @@
                                     <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
                                     <td class="px-4 py-2 border">{{ $item->no }}</td>
                                     <td class="px-4 py-2 border">{{ $item->area }}</td>
-                                    <td class="px-4 py-2 border">{{ $item->subject }}</td>
+                                    <td class="px-4 py-2 border">
+                                        {{ is_array($item->subject) ? implode(',', $item->subject) : $item->subject }}
+                                    </td>
                                     <td class="px-4 py-2 border text-center space-x-2"><a href="{{ route('chronology.preview', $item->uuid) }}"
                                         class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
                                             Preview
                                         </a>
+
+                                        <a href="{{ route('chronology.edit', $item->uuid) }}"
+                                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+                                            Edit
+                                        </a>
+
                                         <a href="{{ route('chronology.download', $item->uuid)}}"
                                             class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm">
                                             Download

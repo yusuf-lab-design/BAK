@@ -16,6 +16,11 @@ class ChronologicalController extends Controller
         return view('chronology.index', compact('chronologies'));
     }
 
+    public function edit(Chronological $chronology)
+    {
+        return view('chronology.edit', compact('chronology'));
+    }
+
     public function create()
     {
         $area = 'Batam';
