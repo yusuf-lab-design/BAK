@@ -36,11 +36,19 @@
                             @forelse ($chronologies as $index => $item)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-4 py-2 border">{{ $index+1 }}</td>
-                                    <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
+                                    <td class="px-4 py-2 border">{{ $item->created_at->format('d-m-Y') }}</td>
                                     <td class="px-4 py-2 border">{{ $item->no }}</td>
                                     <td class="px-4 py-2 border">{{ $item->area }}</td>
                                     <td class="px-4 py-2 border">
-                                        {{ is_array($item->subject) ? implode(',', $item->subject) : $item->subject }}
+                                        @if (!empty($item->subject))
+                                            @foreach ($item->subject as $sub)
+                                                <span class="text-gray-700 px-2 py-1 rounded text-xs mr-1">
+                                                    {{ $sub }}
+                                                </span>
+                                            @endforeach
+                                        @else
+                                            <span class="text-gray-400 text-xs">-</span>
+                                        @endif
                                     </td>
                                     <td class="px-4 py-2 border text-center space-x-2"><a href="{{ route('chronology.preview', $item->uuid) }}"
                                         class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">

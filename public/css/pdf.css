@@ -1,0 +1,110 @@
+body { 
+    font-family: DejaVu Sans, sans-serif; 
+    font-size: 12px; 
+}
+
+.header { 
+    background: #1e3a8a; 
+    color: white; 
+    text-align: center; 
+    font-weight: bold; 
+    padding: 6px; 
+}
+
+.box { 
+    border: 1px solid black; 
+    padding: 6px; 
+    margin-bottom: 2px; 
+}
+
+.section-title { 
+    background: #1e3a8a; 
+    color: white; 
+    text-align: center; 
+    font-weight: bold; 
+    padding: 4px; 
+    margin-bottom: 4px;
+}
+
+.content { 
+    border: 1px solid #ccc; 
+    padding: 8px; 
+    margin-bottom: 4px; 
+    list-style: inside; 
+    flex: 1;
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+}
+
+td { 
+    vertical-align: top; 
+    padding: 2px 4px; 
+}
+
+/* Matrix */
+.matrix-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    text-align: center; 
+    font-size: 10px;
+}
+
+.matrix-table th, 
+.matrix-table td { 
+    border: 1px solid black; 
+    padding: 6px; 
+}
+
+.matrix-table th { 
+    background: #1e3a8a; 
+    color: white; 
+}
+
+.matrix-table td { 
+    vertical-align: middle; 
+}
+
+.matrix-table .check { 
+    font-size: 16px; 
+    color: green; 
+    font-weight: bold; 
+}
+
+/* Layout 2 kolom */
+/* .two-column { 
+    display: flex; 
+    gap: 20px; 
+    margin-top: 10px; 
+    align-items: stretch; 
+} */
+
+/* Default: dua kolom sejajar */
+.two-column-grid {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 20px;
+    margin-top: 10px;
+    align-items: stretch;
+}
+
+/* Saat zoom besar (viewport menyempit), ubah jadi vertikal */
+@media (max-width: 1200px) {
+    .two-column-grid {
+        display: block;
+    }
+
+    .column-left,
+    .column-right {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+
+.column { 
+    flex: 1; 
+}
+

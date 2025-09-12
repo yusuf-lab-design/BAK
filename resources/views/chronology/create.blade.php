@@ -13,7 +13,6 @@
                     <div class="py-8">
                         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
                             
-
                             <!-- Nomor -->
                             <div class="mb-6 flex items-center">
                                 <label for="area" class="w-24 text-sm font-semibold">Nomor :</label>
@@ -33,9 +32,9 @@
                             <!-- Tanggal -->
                             <div class="mb-6 flex items-center">
                                 <label for="tanggal" class="w-24 text-sm font-semibold">Tanggal :</label>
-                                <input type="text" id="tanggal" name="tanggal"
+                                <input type="text" id="tanggal" name="date"
                                     class="border border-gray-300 rounded-lg px-4 py-2 flex-1 bg-gray-100 cursor-not-allowed"
-                                    disabled>
+                                    value="{{ old('date', date('Y-m-d')) }}">
                             </div>
 
                             <!-- Subject -->
@@ -63,7 +62,7 @@
 
                             <div class="mb-4">
                                 <label for="solutions" class="block text-sm font-medium text-gray-700">Solusi</label>
-                                <select id="solution-select" class="w-full" multiple>
+                                <select id="solution-select" name="solutions[]" class="w-full" multiple>
                                     <option value="Proses Sesuai Surkom Pembebanan">Proses Sesuai Surkom Pembebanan</option>
                                     <option value="100% Beban BM">100% Beban BM</option>
                                     <option value="100% Beban Sales">100% Beban Sales</option>
@@ -80,7 +79,7 @@
                                 </select>
 
                                 <ul id="solution-list" class="mt-2 list-disc list-inside text-sm text-gray-700"></ul>
-                                <input type="hidden" name="solutions" id="solutions-input">
+                                {{-- <input type="hidden" name="solutions" id="solutions-input"> --}}
                             </div>
 
                             <script>

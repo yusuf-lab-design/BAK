@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('chronologicals', function (Blueprint $table) {
-            $table->json('subject')->nullable()->change();
-            $table->json('solutions')->nullable()->change();
+            // $table->json('subject')->nullable()->change();
+            // $table->json('solutions')->nullable()->change();
         });
     }
 
@@ -23,8 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('chronologicals', function (Blueprint $table) {
-            $table->string('subject')->nullable()->change();
-            $table->string('solutions')->nullable()->change();
+            // $table->string('subject')->nullable()->change();
+            // $table->string('solutions')->nullable()->change();
         });
     }
 };

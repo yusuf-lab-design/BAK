@@ -18,6 +18,7 @@ class Chronological extends Model
         ];
     
         protected $casts = [
+            'date' => 'date',
             'subject' => 'array',
             'solutions' => 'array',
         ];

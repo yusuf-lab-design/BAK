@@ -94,10 +94,10 @@ class ChronologicalController extends Controller
         $chronology = Chronological::create([
             'no' => $nextNumber,
             'area' => $area,
-            'tanggal' => now(),
-            'subject' => $request->subject ? json_encode($request->subject) : null,
+            'date' => $request->created_at ?? now(),
+            'subject' => $request->subject ?? [],
             'kronologis' => $request->kronologis,
-            'solutions' => $request->solutions ?? '[]',
+            'solutions' => $request->solutions ?? [],
         ]);
 
         // pastikan folder pdf ada
