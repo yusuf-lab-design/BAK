@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\ChronologicalController;
 use Illuminate\Http\Request;
 use App\Models\Chronological;
 use Illuminate\Support\Facades\DB;
@@ -12,13 +11,8 @@ class ChronologicalController extends Controller
 {
     public function index()
     {
-        $chronologies = Chronological::orderBy('created_at', 'desc')->get();
+        $chronologies = Chronological::orderByDesc('created_at')->get();
         return view('chronology.index', compact('chronologies'));
-    }
-
-    public function edit(Chronological $chronology)
-    {
-        return view('chronology.edit', compact('chronology'));
     }
 
     public function create()
@@ -55,7 +49,8 @@ class ChronologicalController extends Controller
     {
         $validated = $request->validate([
             'subject' => 'required|array|min:1',
-            'kronologis' => 'required|string'
+            'kronologis' => 'required|string',
+            'solutions' => 'nullable|array',
         ]);
         
         // default area
@@ -92,12 +87,14 @@ class ChronologicalController extends Controller
     
         // simpan ke database
         $chronology = Chronological::create([
+            'judul' => null,
+            'status' => 'draft',
             'no' => $nextNumber,
             'area' => $area,
             'date' => $request->created_at ?? now(),
-            'subject' => $request->subject ?? [],
+            'subject' => $request->subject,
             'kronologis' => $request->kronologis,
-            'solutions' => $request->solutions ?? [],
+            'solutions' => $request->solutions,
         ]);
 
         // pastikan folder pdf ada
@@ -134,5 +131,46 @@ class ChronologicalController extends Controller
         // penamaan file sesuai nomor dokumen
         $fileName = str_replace('/', '-', $chronology->no) . '.pdf';
         return $pdf->download($fileName);
+    }
+
+    public function edit(Chronological $chronology)
+    {
+        return view('chronology.edit', compact('chronology'));
+    }
+
+    public function update(Request $request, $uuid)
+    {
+        $chronology = Chronological::where('uuid', $uuid)->firstOrFail();
+
+        $chronology->solutions = $request->solutions;
+        $chronology->status = 'draft';
+
+        $chronology->save();
+
+        return redirect()->route('chronology.index')->with('success', "Berita Acara Diperbaharui");
+    }
+
+    public function uploadForm($uuid)
+    {
+        $chronology = Chronological::where('uuid', $uuid)->firstOrFail();
+        return view('chronological.upload', compact('chronology'));
+    }
+
+    public function upload(Request $request, $uuid)
+    {
+        $chronology = Chronological::where('uuid', $uuid)->firstOrFail();
+
+        $request->validate([
+            'signed_document' => 'required|file|mimes:pdf|max:2048',
+        ]);
+
+        $signedPath = $request->file('signed_document')->store('signed_docs');
+        
+        $chronology->signed_file_path = $signedPath;
+        $chronology->status = 'pending';
+
+        $chronology->save();
+
+        return redirect()->route('chronology.index')->with('success', 'dokumen berhasil diupload');
     }
 }

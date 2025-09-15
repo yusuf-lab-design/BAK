@@ -85,7 +85,7 @@ td {
 .two-column-grid {
     display: grid;
     grid-template-columns: 40% 60%;
-    gap: 20px;
+    gap: 10px;
     margin-top: 10px;
     align-items: stretch;
 }

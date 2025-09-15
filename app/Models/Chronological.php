@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 class Chronological extends Model
 {
     protected $fillable = [
+            'status',
+            'signed_file_path',
+            'judul',
             'no',
             'uuid',
             'area',

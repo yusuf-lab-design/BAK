@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::post('/chronology/{uuid}/upload', [ChronologicalController::class, 'upload'])->name('chronology.upload');
     Route::get('/chronology/edit', [ChronologicalController::class, 'edit'])->name('chronology.edit');
     Route::patch('/chronology', [ChronologicalController::class, 'update'])->name('chronology.update');
     Route::get('/chronology', [ChronologicalController::class, 'index'])->name('chronology.index');

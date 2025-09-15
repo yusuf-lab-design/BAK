@@ -21,6 +21,12 @@
                                     value="{{ $nextNumber }}" readonly>
                             </div>
 
+                            <div class="mb-6 flex items-center">
+                                <label for="judul" class="w-24 text-sm font-semibold">Judul :</label>
+                                <input type="text" id="nomor" name="judul"
+                                    class="border border-gray-300 rounded-lg px-4 py-2 flex-1">
+                            </div>
+
                             <!-- Area -->
                             <div class="mb-6 flex items-center">
                                 <label for="area" class="w-24 text-sm font-semibold">Area :</label>
@@ -34,7 +40,7 @@
                                 <label for="tanggal" class="w-24 text-sm font-semibold">Tanggal :</label>
                                 <input type="text" id="tanggal" name="date"
                                     class="border border-gray-300 rounded-lg px-4 py-2 flex-1 bg-gray-100 cursor-not-allowed"
-                                    value="{{ old('date', date('Y-m-d')) }}">
+                                    value="{{ old('date', date('Y-m-d')) }}" readonly>
                             </div>
 
                             <!-- Subject -->
