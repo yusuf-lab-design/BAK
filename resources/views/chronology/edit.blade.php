@@ -8,7 +8,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('chronology.update', $chronology->uuid) }}">
+                <form action="{{ route('chronology.update', $chronology->uuid) }}" method="POST">
                     @csrf
                     @method('PUT')
 
@@ -29,10 +29,17 @@
                             </div>
 
                             <div class="mb-6 flex items-center">
+                                <label class="w-24 text-sm font-semibold">Judul :</label>
+                                <input type="text" name="judul"
+                                class="border border-gray-300 rounded-lg px-4 py-2 flex-1"
+                                value="{{ $chronology->judul }}">
+                            </div>
+
+                            <div class="mb-6 flex items-center">
                                 <label class="w-24 text-sm font-semibold">Tanggal :</label>
                                 <input type="text"
                                 class="border border-gray-300 rounded-lg px-4 py-2 flex-1 bg-gray-100 cursor-not-allowed"
-                                value="{{ \Carbon\Carbon::parse($chronology->updated_at)->format('d-m-Y') }}" disabled>
+                                value="{{ $chronology->created_at }}" disabled>
                             </div>
 
                             <div class="mb-6">
@@ -43,7 +50,7 @@
                                 <div class="grid grid-cols-4 gap-4 mb-3">
                                     @foreach (['Fraud', 'Kecelakaan', 'Perbaikan Sistem', 'Penambahan Pencatatan / Sistem'] as $sub)
                                         <label class="flex items-center text-xs">
-                                            <input type="checkbox" name="subject[] value= {{ $sub }}" class="mr-2"
+                                            <input type="checkbox" name="subject[]" value= "{{ $sub }}" class="mr-2"
                                             {{ in_array($sub, $selectedSubject ?? []) ? 'checked' : '' }}> {{ $sub }}
                                         </label>
                                     @endforeach
@@ -85,13 +92,13 @@
                                         "Batalkan Transaksi",
                                         "Revisi Menggunakan COA:"
                                     ] as $opt)
-                                    <option value="{{ $opt }}" {{ in_array($opt, $selectedSolutions ?? []) ? 'selected' : '' }}>{{ $sub }}</option>
+                                    <option value="{{ $opt }}" {{ in_array($opt, $selectedSolutions ?? []) ? 'selected' : '' }}>{{ $opt }}</option>
                                         
                                     @endforeach
                                 </select>
                                 
                                 <ul id="solution-list" class="mt-2 list-disc list-inside text-sm text-gray-700">
-                                    @if (!empty($selectedSolution))
+                                    @if (!empty($selectedSolutions))
                                         @foreach ($selectedSolutions as $s)
                                             <li>{{ $s }}</li>
                                         @endforeach
@@ -107,13 +114,13 @@
                                     let inital = {!! json_encode($selectedSolutions) !!};
                                     let list = $('#solution-list');
                                     list.empty();
-                                    (inital || []).forEach(v => list.append(`<li>{$v}</li>`));
+                                    (inital || []).forEach(v => list.append(`<li>${v}</li>`));
 
                                     $('#solution-select').on('change', function() {
                                         let values = $(this).val()|| [];
                                         let list = $('#solution-list');
                                         list.empty();
-                                        values.forEach(v => list.append(`<li>{v}</li>`));
+                                        values.forEach(v => list.append(`<li>${v}</li>`));
                                         $('#solutions-input').val(JSON.stringify(values));
                                     });
                                 });

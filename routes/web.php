@@ -4,6 +4,7 @@ use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChronologicalController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
@@ -24,13 +25,17 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/chronology/{uuid}/upload', [ChronologicalController::class, 'upload'])->name('chronology.upload');
-    Route::get('/chronology/edit', [ChronologicalController::class, 'edit'])->name('chronology.edit');
-    Route::patch('/chronology', [ChronologicalController::class, 'update'])->name('chronology.update');
+    Route::get('/chronology/{uuid}/edit', [ChronologicalController::class, 'edit'])->name('chronology.edit');
+    Route::put('/chronology/{uuid}', [ChronologicalController::class, 'update'])->name('chronology.update');
     Route::get('/chronology', [ChronologicalController::class, 'index'])->name('chronology.index');
     Route::get('/chronology/create', [ChronologicalController::class, 'create'])->name('chronology.create');
     Route::post('/chronology/store', [ChronologicalController::class, 'store'])->name('chronology.store');
     Route::get('/chronlogy/{chronology}/preview', [ChronologicalController::class, 'preview'])->name('chronology.preview');
     Route::get('/chronology/{chronology:uuid}/download', [ChronologicalController::class, 'download'])->name('chronology.download');
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
 });
 
 Route::get('/', function() {

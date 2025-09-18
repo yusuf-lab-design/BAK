@@ -21,11 +21,14 @@
                                     value="{{ $nextNumber }}" readonly>
                             </div>
 
-                            <div class="mb-6 flex items-center">
-                                <label for="judul" class="w-24 text-sm font-semibold">Judul :</label>
-                                <input type="text" id="nomor" name="judul"
-                                    class="border border-gray-300 rounded-lg px-4 py-2 flex-1">
+                            @if (auth()->check() && in_array(auth()->user()->role, ['ho', 'admin']))
+                                <div class="mb-6 flex items-center">
+                                    <label for="judul" class="w-24 text-sm font-semibold">Judul :</label>
+                                    <input type="text" id="nomor" name="judul"
+                                        class="border border-gray-300 rounded-lg px-4 py-2 flex-1">
                             </div>
+                                
+                            @endif
 
                             <!-- Area -->
                             <div class="mb-6 flex items-center">

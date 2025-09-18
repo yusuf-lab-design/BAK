@@ -133,16 +133,19 @@ class ChronologicalController extends Controller
         return $pdf->download($fileName);
     }
 
-    public function edit(Chronological $chronology)
+    public function edit($uuid)
     {
-        return view('chronology.edit', compact('chronology'));
+        $chronology = Chronological::where('uuid', $uuid)->firstOrFail();
+        // dd($chronology);
+        return view('chronology.edit', compact('chronology', 'uuid'));
+        
     }
 
     public function update(Request $request, $uuid)
     {
         $chronology = Chronological::where('uuid', $uuid)->firstOrFail();
 
-        $chronology->solutions = $request->solutions;
+        $chronology->update($request->all());
         $chronology->status = 'draft';
 
         $chronology->save();

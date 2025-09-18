@@ -58,10 +58,15 @@
                                             <span class="text-gray-400 text-xs">-</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-2 border text-center space-x-2"><a href="{{ route('chronology.preview', $item->uuid) }}"
-                                        class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm" title="Preview Pdf">
-                                            Preview
-                                        </a>
+                                    
+                                    <td class="px-4 py-2 border text-center space-x-2">
+                                        @if (auth()->user()->role === 'admin')
+                                            <a href="{{ route('chronology.preview', $item->uuid) }}"
+                                                class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm" title="Preview Pdf">
+                                                    Preview
+                                            </a>
+                                        @endif
+                                        
 
                                         <a href="{{ route('chronology.edit', $item->uuid) }}"
                                             class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-sm" title="Edit Pdf">
@@ -69,8 +74,8 @@
                                         </a>
 
                                         @if (auth()->user()->role === 'area' && in_array($item->status,['draft', 'rejected']))
-                                            <button class="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 text-sm" title="Upload Pdf"
-                                                onclick="openUploadModal('{{ $item->uuid }}')">Upload Dokumen
+                                            <button class="bg-purple-600 text-white px-2 py-1 rounded hover:bg-purple-700 text-sm" title="Upload Pdf"
+                                                onclick="openUploadModal('{{ $item->uuid }}')">Upload
                                             </button>
                                         @endif
 
