@@ -176,10 +176,14 @@
     @endif
 
     @if(empty($isPdf))
-        <div style="text-align: right; margin-top: 15px;">
+        <div style="display: flex; justify-content: flex-end; text-align: right; gap:10px; margin-top: 15px;">
             <a href="{{ route('chronology.download', $chronology->uuid) }}"
             style="background:#2563eb; color:white; padding:6px 12px; border-radius:4px; text-decoration:none; font-weight:bold;">
                 Download
+            </a>
+            <a href="{{ route('chronology.index') }}"
+            style="background:green; color:white; padding:6px 12px; border-radius:4px; text-decoration:none; font-weight:bold;">
+                Back
             </a>
         </div>
     @endif    

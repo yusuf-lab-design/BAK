@@ -26,29 +26,30 @@
                             <tr class="bg-gray-100 text-left">
                                 <th class="px-4 py-2 border">#</th>
                                 <th class="px-4 py-2 border">Tanggal</th>
-                                <th class="px-4 py-2 border">No Document</th>
-                                <th class="px-4 py-2 border">Area</th>
-                                <th class="px-4 py-2 border">Subject</th>
+                                <th class="px-4 py-2 border text-center">No Document</th>
+                                <th class="px-4 py-2 border text-center">Area</th>
+                                <th class="px-4 py-2 border text-center">Subject</th>
+                                <th class="px-4 py-2 border text-center">Solusi</th>
                                 <th class="px-4 py-2 border text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($chronologies as $index => $item)
                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 border">{{ $index+1 }}</td>
-                                    <td class="px-4 py-2 border">{{ $item->created_at->format('d-m-Y') }}</td>
-                                    <td class="px-4 py-2 border">{{ $item->no }}
+                                    <td class="px-4 py-2 border text-xs">{{ $index+1 }}</td>
+                                    <td class="px-4 py-2 border text-xs">{{ $item->created_at->format('d-m-Y') }}</td>
+                                    <td class="px-4 py-2 border text-xs">{{ $item->no }}
                                         @if ($item->status === 'draft')
                                             <span class="text-yellow-500 font-bold ml-2" title="Draft">D</span>
                                         @elseif ($item->status === 'pending')
                                             <span class="text-blue-500 font-bold ml-2" title="Pending">P</span>
-                                        @elseif ($item->status === 'approved')
+                                        @elseif ($item->status === 'approve')
                                             <span class="text-green-500 font-bold ml-2">A</span>
-                                        @elseif ($item->status === 'rejected')
+                                        @elseif ($item->status === 'reject')
                                             <span class="text-red-500 font-bold ml-2" title="Rejected">R</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-2 border">{{ $item->area }}</td>
+                                    <td class="px-4 py-2 border text-xs">{{ $item->area }}</td>
                                     <td class="px-4 py-2 border">
                                         @if (!empty($item->subject))
                                             <span class="text-gray-700 text-xs">
@@ -58,31 +59,56 @@
                                             <span class="text-gray-400 text-xs">-</span>
                                         @endif
                                     </td>
+                                    <td class="px-4 py-2 border">
+                                        @if (!empty($item->solutions) && is_array($item->solutions))
+                                            <span class="text-gray-700 text-xs">
+                                                {{ implode(', ', $item->solutions) }}
+                                            </span>
+                                        @else
+                                            <span class="text-gray-400 text-xs">-</span>
+                                        @endif
+                                    </td>
                                     
                                     <td class="px-4 py-2 border text-center space-x-2">
+                                        {{-- ini digunakan untuk preview pdf developer --}}
                                         @if (auth()->user()->role === 'admin')
                                             <a href="{{ route('chronology.preview', $item->uuid) }}"
                                                 class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm" title="Preview Pdf">
                                                     Preview
                                             </a>
                                         @endif
-                                        
+                                        @if (auth()->user()->role === 'area')
+                                            @if (in_array($item->status, ['reject', 'draft']))
+                                                <a href="{{ route('chronology.edit', $item->uuid) }}"
+                                                    class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-sm" title="Edit Pdf">
+                                                    Edit
+                                                </a>
 
-                                        <a href="{{ route('chronology.edit', $item->uuid) }}"
-                                            class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-sm" title="Edit Pdf">
-                                            Edit
-                                        </a>
+                                                <button class="bg-purple-600 text-white px-2 py-1 rounded hover:bg-purple-700 text-sm" title="Upload Pdf"
+                                                    onclick="openUploadModal('{{ $item->uuid }}')">Upload
+                                                </button>
+                                                <a href="{{ route('chronology.download', $item->uuid)}}"
+                                                    class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 text-sm" title="Download Pdf">
+                                                    Download
+                                                </a>
 
-                                        @if (auth()->user()->role === 'area' && in_array($item->status,['draft', 'rejected']))
-                                            <button class="bg-purple-600 text-white px-2 py-1 rounded hover:bg-purple-700 text-sm" title="Upload Pdf"
-                                                onclick="openUploadModal('{{ $item->uuid }}')">Upload
-                                            </button>
+                                            @elseif ($item->status === 'approve')
+                                                <span class="text-green-600 text-sm font-semibold"><i>Approved</i></span>
+                                            @elseif ($item->status === 'pending')
+                                                <span class="text-blue-600 text-sm font-semibold"><i>Pending</i></span>
+                                            @endif
+                                                
                                         @endif
+                                        
+                                        @auth
+                                            @if (in_array(auth()->user()->role,['ho','admin']) && $item->signed_file_path)
+                                                <a href="{{ route('chronology.hoDownload', $item->uuid) }}"
+                                                    class="bg-teal-500 text-white px-2 py-1 rounded hover:underline text-sm">
+                                                    Download
+                                                </a>
+                                            @endif
+                                        @endauth
 
-                                        <a href="{{ route('chronology.download', $item->uuid)}}"
-                                            class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 text-sm" title="Download Pdf">
-                                            Download
-                                        </a>
                                     </td>
                                 </tr>
                                 

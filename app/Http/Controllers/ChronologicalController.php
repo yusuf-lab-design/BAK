@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Chronological;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class ChronologicalController extends Controller
 {
@@ -110,6 +111,15 @@ class ChronologicalController extends Controller
         $fileName = str_replace('/', '-', $chronology->no) . '.pdf';
         $pdf->save($path . '/' .$fileName);
 
+        switch (auth()->user()->role) {
+            case 'admin' :
+                return redirect()->route('chronology.preview', $chronology->uuid)
+                ->with('success', 'Berita acara berhasil disimpan');
+            case 'ho' :
+            case 'area' :
+                return redirect()->route('chronology.index')->with('success', 'Berita acara berhasil disimpan');
+        }
+
         return redirect()->route('chronology.preview', $chronology->uuid)
         ->with('success', 'Berita acara berhasil disimpan dengan nomor : ' . $chronology->no);
     }
@@ -136,6 +146,11 @@ class ChronologicalController extends Controller
     public function edit($uuid)
     {
         $chronology = Chronological::where('uuid', $uuid)->firstOrFail();
+        
+        if (in_array($chronology->status, ['approve', 'pending']) && auth()->user()->role === 'area' ) {
+            abort(403, 'Dokumen sedang dalam pengecekan atau sudah disetujui');
+        }
+        
         // dd($chronology);
         return view('chronology.edit', compact('chronology', 'uuid'));
         
@@ -144,11 +159,18 @@ class ChronologicalController extends Controller
     public function update(Request $request, $uuid)
     {
         $chronology = Chronological::where('uuid', $uuid)->firstOrFail();
+        
+        if (in_array($chronology->status, ['approve', 'pending']) && auth()->user()->role === 'area' ) {
+            abort(403, 'Dokumen sedang dalam pengecekan atau sudah disetujui');
+        }
 
-        $chronology->update($request->all());
-        $chronology->status = 'draft';
+        $data = $request->all();
 
-        $chronology->save();
+        if (in_array(auth()->user()->role, ['ho', 'admin']) && $request->has('status')) {
+            $data['status'] = $request->status;
+        }
+
+        $chronology->update($data);
 
         return redirect()->route('chronology.index')->with('success', "Berita Acara Diperbaharui");
     }
@@ -175,5 +197,62 @@ class ChronologicalController extends Controller
         $chronology->save();
 
         return redirect()->route('chronology.index')->with('success', 'dokumen berhasil diupload');
+    }
+
+    public function hoDownload($uuid)
+    {
+        $chronology = Chronological::where('uuid', $uuid)->firstOrFail();
+
+        if (!in_array(auth()->user()->role, ['ho', 'admin'])) {
+            abort(403, 'Unauthorized');
+        }
+
+        $path = $chronology->signed_file_path;
+
+        if (!$path || !Storage::exists($path)){
+            return back()->with('error', 'File belum di upload');
+        }
+
+        $fileName = str_replace('/', '-', $chronology->no) . '-signed.pdf';
+
+        return Storage::download($path, $fileName);
+    }
+
+    public function approve($uuid)
+    {
+        $chronology = Chronological::where('uuid', $uuid)->firstOrFail();
+
+        if (! in_array(auth()->user()->role, ['ho', 'admin'])) {
+            abort(403);
+        }
+
+        //opsional validasi kalau file belum diupload
+        if (!$chronology->signed_file_path) {
+            return back()->with('error', 'Dokumen belum di upload oleh area');
+        }
+
+        $chronology->status = 'approve';
+        $chronology->save();
+
+        return redirect()->route('chronology.index')->with('success', 'Dokumen has approved');
+    }
+
+    public function reject($uuid)
+    {
+        $chronology = Chronological::where('uuid', $uuid)->firstOrFail();
+
+        if (! in_array(auth()->user()->role, ['ho', 'admin'])) {
+            abort(403);
+        }
+
+        //opsional validasi kalau file belum diupload
+        if (!$chronology->signed_file_path) {
+            return back()->with('error', 'Dokumen belum di upload oleh area');
+        }
+
+        $chronology->status = 'reject';
+        $chronology->save();
+
+        return redirect()->route('chronology.index')->with('error', 'Dokumen has unapproved');
     }
 }

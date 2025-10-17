@@ -24,14 +24,17 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::put('/chronology/{uuid}/reject', [ChronologicalController::class, 'reject'])->name('chronology.reject');
+    Route::put('/chronology/{uuid}/approve', [ChronologicalController::class, 'approve'])->name('chronology.approve');
     Route::post('/chronology/{uuid}/upload', [ChronologicalController::class, 'upload'])->name('chronology.upload');
     Route::get('/chronology/{uuid}/edit', [ChronologicalController::class, 'edit'])->name('chronology.edit');
     Route::put('/chronology/{uuid}', [ChronologicalController::class, 'update'])->name('chronology.update');
     Route::get('/chronology', [ChronologicalController::class, 'index'])->name('chronology.index');
     Route::get('/chronology/create', [ChronologicalController::class, 'create'])->name('chronology.create');
     Route::post('/chronology/store', [ChronologicalController::class, 'store'])->name('chronology.store');
-    Route::get('/chronlogy/{chronology}/preview', [ChronologicalController::class, 'preview'])->name('chronology.preview');
+    Route::get('/chronology/{chronology}/preview', [ChronologicalController::class, 'preview'])->name('chronology.preview');
     Route::get('/chronology/{chronology:uuid}/download', [ChronologicalController::class, 'download'])->name('chronology.download');
+    Route::get('/chronology/{chronology:uuid}/ho-download', [ChronologicalController::class, 'hoDownload'])->name('chronology.hoDownload');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

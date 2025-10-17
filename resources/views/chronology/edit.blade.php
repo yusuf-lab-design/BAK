@@ -126,6 +126,25 @@
                                 });
                             </script>
 
+                            @if (in_array(auth()->user()->role, ['ho', 'admin']))
+                                <div class="mt-4">
+                                    <form action="{{ route('chronology.update', $chronology->uuid) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" value="approve" name="status">
+                                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow">Approve</button>
+                                    </form>
+                                </div>
+                                <div class="mt-4">
+                                    <form action="{{ route('chronology.update', $chronology->uuid) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" value="reject" name="status">
+                                        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow">Reject</button>
+                                    </form>
+                                </div>
+                            @endif
+
                             <div class="mt-4">
                                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow">Update</button>
                             </div>
